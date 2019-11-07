@@ -8,9 +8,6 @@
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint/eslint-plugin"],
-  "ecmaFeatures": {
-    "jsx": true
-  },
   "env": {
     "es6": true
   }
