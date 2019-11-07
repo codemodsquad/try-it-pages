@@ -1,12 +1,16 @@
 {
   "extends": [
     "@jedwards1211/eslint-config",
+    "@jedwards1211/eslint-config-react",
     "eslint-config-prettier",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint/eslint-plugin"],
+  "ecmaFeatures": {
+    "jsx": true
+  },
   "env": {
     "es6": true
   }
