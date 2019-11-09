@@ -13,6 +13,7 @@ module.exports = function(api) {
         ? { forceAllTransforms: true }
         : { targets: { node: 'current' } },
     ],
+    '@babel/preset-typescript',
     '@babel/preset-react',
   ]
 
