@@ -2,18 +2,24 @@ import * as React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Select from '@material-ui/core/Select'
+import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
+import MuiLink from '@material-ui/core/Link'
 import Loading from './Loading'
 import loadable from '@loadable/component'
+import { Typography } from '@material-ui/core'
 
-const Css2Jss = loadable(() => import('./css2jss'), {
+const Css2Jss = loadable(() => import('./transforms/Css2Jss'), {
   fallback: <Loading />,
 })
-const CfnTemplateYamlToJs = loadable(() => import('./CfnTemplateYamlToJs'), {
-  fallback: <Loading />,
-})
+const CfnTemplateYamlToJs = loadable(
+  () => import('./transforms/CfnTemplateYamlToJs'),
+  {
+    fallback: <Loading />,
+  }
+)
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -54,7 +60,9 @@ export default function Main(): React.ReactElement<any, any> {
   const transform = match?.params?.transform
 
   React.useEffect(() => {
-    if (!transform) history.push(`/css2jss`)
+    if (!transform)
+      history.push('/' + (localStorage.getItem('lastTransform') || 'css2jss'))
+    else localStorage.setItem('lastTransform', transform)
   }, [transform])
 
   return (
@@ -70,7 +78,7 @@ export default function Main(): React.ReactElement<any, any> {
             disableUnderline
           >
             <MenuItem value="css2jss" component={Link as any} to="/css2jss">
-              {titles.css2jss}
+              CSS To JSS
             </MenuItem>
             <MenuItem
               value="cfn-template-yaml-to-js"

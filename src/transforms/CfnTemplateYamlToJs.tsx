@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { convertText } from 'cfn-template-yaml-to-js'
-import InputOutputView from './InputOutputView'
+import InputOutputView from '../InputOutputView'
 
 // @ts-ignore
-import example from '!!raw-loader!./examples/cfn-template.yaml'
+import example from '!!raw-loader!../examples/cfn-template.yaml'
 
 export default function CfnTemplateYamlToJs(): React.ReactElement<any, any> {
   return (

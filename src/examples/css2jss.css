@@ -1,8 +1,4 @@
-import * as React from 'react'
-import { convertCssToJssString } from 'jss-codemorphs'
-import InputOutputView from './InputOutputView'
-
-const example = `@keyframes alarm {
+@keyframes alarm {
   from {
     color: red;
   }
@@ -15,7 +11,8 @@ const example = `@keyframes alarm {
 }
 .foo {
   color: green;
-  & .bar-qux, & .glorm:after {
+  & .bar-qux,
+  & .glorm:after {
     color: red;
   }
   & .baz:after {
@@ -44,17 +41,4 @@ const example = `@keyframes alarm {
       color: orange;
     }
   }
-}
-`
-
-export default function Css2Jss(): React.ReactElement<any, any> {
-  return (
-    <InputOutputView
-      storageKey="css2jss"
-      inputTitle="Input CSS"
-      outputTitle="Output JSS"
-      transform={convertCssToJssString}
-      example={example}
-    />
-  )
 }
