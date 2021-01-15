@@ -123,7 +123,7 @@ export default function InputOutputView({
           <CircularProgress variant="indeterminate" />
         ) : (
           <textarea
-            value={output instanceof Error ? output.message : output}
+            value={output instanceof Error ? output.stack : output}
             readOnly
             className={classNames(classes.textarea, {
               [classes.error]: output instanceof Error,
