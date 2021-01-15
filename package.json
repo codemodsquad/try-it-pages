@@ -1,10 +1,12 @@
 {
-  "name": "typescript-react-library-skeleton",
+  "name": "@codemodsquad/try-it-pages",
   "version": "0.0.0-development",
-  "description": "my personal skeleton for TypeScript/React library NPM packages",
+  "description": "try it pages for my various codemod tools",
   "main": "index.js",
   "sideEffects": false,
+  "private": true,
   "scripts": {
+    "start": "webpack serve",
     "lint": "eslint $npm_package_config_lint",
     "lint:fix": "eslint $npm_package_config_lint",
     "lint:watch": "esw --watch $npm_package_config_lint",
@@ -12,10 +14,8 @@
     "prettier:check": "prettier --list-different .babelrc.js *.json *.md *.{ts,tsx} '{src,test}/**/*.{js,ts,tsx}'",
     "tsc": "tsc --noEmit",
     "tsc:watch": "npm run tsc -- --watch",
-    "clean": "rimraf es lib $(cd src; ls) *.js *.d.{ts,tsx}",
-    "build": "npm run clean && npm run build:types && npm run build:js",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir es --extensions \".ts,.tsx\" --source-maps inline && cross-env BABEL_ENV=es5 babel src --out-dir . --extensions \".ts,.tsx\"",
+    "clean": "rimraf build",
+    "build": "npm run clean && cross-env NODE_ENV=production BABEL_ENV=es5 webpack",
     "test": "cross-env NODE_ENV=test BABEL_ENV=es5 mocha $npm_package_config_mocha && cross-env NODE_ENV=test BABEL_ENV=coverage nyc --reporter=lcov --reporter=text mocha $npm_package_config_mocha",
     "test:watch": "cross-env NODE_ENV=test BABEL_ENV=test mocha $npm_package_config_mocha --watch --watch-extensions js,ts,tsx",
     "test:debug": "cross-env NODE_ENV=test BABEL_ENV=test mocha --inspect-brk $npm_package_config_mocha",
@@ -71,19 +71,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jedwards1211/typescript-react-library-skeleton.git"
+    "url": "https://github.com/codemodsquad/try-it-pages.git"
   },
   "keywords": [
-    "typescript",
-    "react",
-    "skeleton"
+    "codemods",
+    "refactoring",
+    "codemodsquad",
+    "productivity-tools"
   ],
   "author": "Andy Edwards",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jedwards1211/typescript-react-library-skeleton/issues"
+    "url": "https://github.com/codemodsquad/try-it-pages/issues"
   },
-  "homepage": "https://github.com/jedwards1211/typescript-react-library-skeleton#readme",
+  "homepage": "https://github.com/codemodsquad/try-it-pages#readme",
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
@@ -105,14 +106,25 @@
     "@jedwards1211/eslint-config-react": "^4.0.0",
     "@jedwards1211/eslint-config-typescript": "^1.0.0",
     "@types/chai": "^4.2.0",
+    "@types/classnames": "^2.2.11",
     "@types/enzyme": "^3.10.3",
+    "@types/jscodeshift": "^0.7.2",
+    "@types/loadable__component": "^5.13.1",
+    "@types/lodash": "^4.14.167",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.6",
-    "@types/react": "^16.9.11",
+    "@types/prettier": "^2.1.6",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
+    "assert-browserify": "^2.0.0",
     "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.2.2",
     "babel-plugin-istanbul": "^5.1.0",
+    "buffer": "^6.0.3",
     "chai": "^4.2.0",
     "codecov": "^3.1.0",
+    "constants-browserify": "^1.0.0",
     "copy": "^0.3.2",
     "cross-env": "^5.2.0",
     "enzyme": "^3.10.0",
@@ -121,6 +133,7 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.16.0",
     "eslint-watch": "^4.0.2",
+    "gh-pages": "^3.1.0",
     "husky": "^1.1.4",
     "istanbul": "^0.4.5",
     "jsdom": "^15.2.1",
@@ -128,17 +141,33 @@
     "lint-staged": "^8.0.4",
     "mocha": "^6.2.1",
     "nyc": "^13.1.0",
+    "path-browserify": "^1.0.1",
     "prettier": "^1.15.2",
     "prettier-eslint": "^8.8.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "process": "^0.11.10",
+    "raw-loader": "^4.0.2",
     "rimraf": "^2.6.0",
     "semantic-release": "^15.1.4",
-    "typescript": "^3.7.2"
+    "typescript": "^4.0.0",
+    "webpack": "^5.14.0",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-middleware": "^4.0.4",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "prop-types": "^15.7.2"
+    "@loadable/component": "^5.14.1",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "cfn-template-yaml-to-js": "^1.0.0",
+    "classnames": "^2.2.6",
+    "jscodeshift": "^0.11.0",
+    "jss-codemorphs": "^1.2.6",
+    "lodash": "^4.17.20",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-router-dom": "^5.2.0"
   },
   "peerDependencies": {
     "react": "^16.11.0"

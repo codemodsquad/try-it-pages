@@ -7,3 +7,4 @@ es
 /*.js.flow
 /*.d.ts
 !/.babelrc.js
+/dist
