@@ -71,7 +71,7 @@ export default function InputOutputView({
     if (queryParams.input == null) {
       setInput(localStorage.getItem(storageKey) || example)
     }
-  }, [example])
+  }, [queryParams.input, example])
 
   const [output, setOutput] = React.useState<string | Error>('')
   const [updating, setUpdating] = React.useState(false)

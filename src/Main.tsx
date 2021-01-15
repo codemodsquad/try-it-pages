@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
+const titles = {
+  css2jss: 'CSS To JSS',
+  'cfn-template-yaml-to-js': 'CloudFormation Template YAML to JS',
+}
+
 export default function Main(): React.ReactElement<any, any> {
   const classes = useStyles()
   const history = useHistory()
@@ -57,7 +62,7 @@ export default function Main(): React.ReactElement<any, any> {
       <AppBar position="static" color="primary">
         <Toolbar>
           <Select
-            value={transform}
+            value={transform || ''}
             classes={{
               root: classes.transformSelector,
               icon: classes.transformSelectorIcon,
@@ -65,14 +70,14 @@ export default function Main(): React.ReactElement<any, any> {
             disableUnderline
           >
             <MenuItem value="css2jss" component={Link as any} to="/css2jss">
-              CSS To JSS
+              {titles.css2jss}
             </MenuItem>
             <MenuItem
               value="cfn-template-yaml-to-js"
               component={Link as any}
               to="/cfn-template-yaml-to-js"
             >
-              CloudFormation Template YAML to JS
+              {titles['cfn-template-yaml-to-js']}
             </MenuItem>
           </Select>
         </Toolbar>
