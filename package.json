@@ -15,14 +15,15 @@
     "tsc": "tsc --noEmit",
     "tsc:watch": "npm run tsc -- --watch",
     "clean": "rimraf build",
-    "build": "npm run clean && cross-env NODE_ENV=production BABEL_ENV=es5 webpack",
+    "build": "npm run clean && cross-env NODE_ENV=production BABEL_ENV=es5 webpack && copy index.html dist",
     "test": "cross-env NODE_ENV=test BABEL_ENV=es5 mocha $npm_package_config_mocha && cross-env NODE_ENV=test BABEL_ENV=coverage nyc --reporter=lcov --reporter=text mocha $npm_package_config_mocha",
     "test:watch": "cross-env NODE_ENV=test BABEL_ENV=test mocha $npm_package_config_mocha --watch --watch-extensions js,ts,tsx",
     "test:debug": "cross-env NODE_ENV=test BABEL_ENV=test mocha --inspect-brk $npm_package_config_mocha",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov; codecov",
     "prepublishOnly": "npm run clean && npm run prettier:check && npm run lint && npm test && npm run build",
     "open:coverage": "open coverage/lcov-report/index.html",
-    "semantic-release": "semantic-release"
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d dist"
   },
   "config": {
     "lint": "--cache --ext .js,.ts,.tsx src test",
