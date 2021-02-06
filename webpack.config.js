@@ -51,7 +51,7 @@ module.exports = {
         test: /\.js$/,
       },
       {
-        test: /node_modules\/yaml\/browser\/dist\/.*/,
+        test: /node_modules\/yaml/,
         type: 'javascript/auto',
         use: {
           loader: 'babel-loader',
