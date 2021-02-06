@@ -4,15 +4,28 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
+import {
+  Route,
+  Switch,
+  Link,
+  useRouteMatch,
+  useHistory,
+} from 'react-router-dom'
 import Loading from './Loading'
 import loadable from '@loadable/component'
+import Typography from '@material-ui/core/Typography'
 
 const Css2Jss = loadable(() => import('./transforms/Css2Jss'), {
   fallback: <Loading />,
 })
 const CfnTemplateYamlToJs = loadable(
   () => import('./transforms/CfnTemplateYamlToJs'),
+  {
+    fallback: <Loading />,
+  }
+)
+const WpjStatusDecoder = loadable(
+  () => import('./transforms/WpjStatusDecoder'),
   {
     fallback: <Loading />,
   }
@@ -66,25 +79,44 @@ export default function Main(): React.ReactElement<any, any> {
     <div className={classes.root}>
       <AppBar position="static" color="primary">
         <Toolbar>
-          <Select
-            value={transform || ''}
-            classes={{
-              root: classes.transformSelector,
-              icon: classes.transformSelectorIcon,
-            }}
-            disableUnderline
-          >
-            <MenuItem value="css2jss" component={Link as any} to="/css2jss">
-              CSS To JSS
-            </MenuItem>
-            <MenuItem
-              value="cfn-template-yaml-to-js"
-              component={Link as any}
-              to="/cfn-template-yaml-to-js"
-            >
-              {titles['cfn-template-yaml-to-js']}
-            </MenuItem>
-          </Select>
+          <Switch>
+            <Route
+              path="/wpj-status-decoder"
+              render={() => (
+                <Typography variant="h6" color="inherit">
+                  WPJ Status Decoder
+                </Typography>
+              )}
+            />
+            <Route
+              path="*"
+              render={() => (
+                <Select
+                  value={transform || ''}
+                  classes={{
+                    root: classes.transformSelector,
+                    icon: classes.transformSelectorIcon,
+                  }}
+                  disableUnderline
+                >
+                  <MenuItem
+                    value="css2jss"
+                    component={Link as any}
+                    to="/css2jss"
+                  >
+                    CSS To JSS
+                  </MenuItem>
+                  <MenuItem
+                    value="cfn-template-yaml-to-js"
+                    component={Link as any}
+                    to="/cfn-template-yaml-to-js"
+                  >
+                    {titles['cfn-template-yaml-to-js']}
+                  </MenuItem>
+                </Select>
+              )}
+            />
+          </Switch>
         </Toolbar>
       </AppBar>
       <div className={classes.main}>
@@ -93,6 +125,7 @@ export default function Main(): React.ReactElement<any, any> {
           path="/cfn-template-yaml-to-js"
           component={CfnTemplateYamlToJs}
         />
+        <Route path="/wpj-status-decoder" component={WpjStatusDecoder} />
       </div>
     </div>
   )
