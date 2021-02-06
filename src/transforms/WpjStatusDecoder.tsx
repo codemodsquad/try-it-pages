@@ -4,7 +4,7 @@ import InputOutputView from '../InputOutputView'
 // @ts-ignore
 import example from '!!raw-loader!../examples/sistema-oaxaca.wpj'
 
-type View = 'North or East' | 'North or West' | 'North' | 'East' | 'West'
+type View = 'north or east' | 'north or west' | 'north' | 'east' | 'west'
 
 type DecodedStatus = {
   detached: boolean
@@ -16,7 +16,7 @@ type DecodedStatus = {
   preserveVerticalShotOrientation?: boolean
   preserveVerticalShotLength?: boolean
   typeIsOther: boolean
-  launchAction?: 'edit' | 'open'
+  launchAction: 'properties' | 'edit' | 'open'
   defaultViewAfterCompilation?: View
   processSourceSvgIfAttached: boolean
 }
@@ -27,7 +27,7 @@ type DecodedStatus = {
 // 2^2 : ? (maybe this is whether it's compiled?)
 // 2^3 : name defines segment
 // 2^4 : 1 = Feet, 0 = Meters
-// 2^5 : ? (FLG_WESTWARD in Walls source code, not sure if it's still used?)
+// 2^5 : ? (FLG_westWARD in Walls source code, not sure if it's still used?)
 // In the following cases, if both the no and the yes bit are 0,
 // the value is inherited from the parent instead.
 // Use georeference:
@@ -51,26 +51,26 @@ type DecodedStatus = {
 // 2^17: edit on launch
 // 2^18: open on launch
 // Default view after compilation (bits 21-19):
-// 1: North or East
-// 10: North or West
-// 11: North
-// 100: East
-// 101: West
+// 1: north or east
+// 10: north or west
+// 11: north
+// 100: east
+// 101: west
 //
 // 2^22: Process source SVG if one is attached
 
 function decodeDefaultViewAfterCompilation(value: number): View | undefined {
   switch (value) {
     case 1:
-      return 'North or East'
+      return 'north or east'
     case 2:
-      return 'North or West'
+      return 'north or west'
     case 3:
-      return 'North'
+      return 'north'
     case 4:
-      return 'East'
+      return 'east'
     case 5:
-      return 'West'
+      return 'west'
   }
 }
 
@@ -91,7 +91,7 @@ function decodeStatus(status: number): DecodedStatus {
       : undefined,
     preserveVerticalShotLength: bit(14) ? false : bit(15) ? true : undefined,
     typeIsOther: bit(16),
-    launchAction: bit(17) ? 'edit' : bit(18) ? 'open' : undefined,
+    launchAction: bit(17) ? 'edit' : bit(18) ? 'open' : 'properties',
     defaultViewAfterCompilation: decodeDefaultViewAfterCompilation(
       (status >> 19) & 0x7
     ),
@@ -125,70 +125,92 @@ function decodeWpjStatus(input: string): string {
         const decodedStatus = decodeStatus(parseInt(status))
         if (topBook && !topBook.status) topBook.status = decodedStatus
 
-        const formatValue = <K extends keyof DecodedStatus>(key: K): string => {
+        const formatValue = <K extends keyof DecodedStatus>(
+          key: K,
+          defaultValue: DecodedStatus[K]
+        ): string => {
           const value = decodedStatus[key]
           if (typeof value === 'string') return String(value)
           if (value === true) return 'yes'
           if (value === false) return 'no'
-          const inheritedValue = inherited(key)
+          const inheritedValue = inherited(key) ?? defaultValue
           return `${
             inheritedValue === true
               ? 'yes'
               : inheritedValue === false
               ? 'no'
-              : inheritedValue == null
-              ? 'null'
               : String(inheritedValue)
           } (inherited)`
         }
 
         const lines = []
         lines.push(
-          `; detached:                       ${formatValue('detached')}`
+          `; detached:                       ${formatValue('detached', false)}`
         )
         lines.push(
           `; name defines segment:           ${formatValue(
-            'nameDefinesSegment'
+            'nameDefinesSegment',
+            false
           )}`
         )
         lines.push(
-          `; display unit:                   ${formatValue('displayUnit')}`
+          `; display unit:                   ${formatValue(
+            'displayUnit',
+            'meters'
+          )}`
         )
         lines.push(
-          `; use georeference:               ${formatValue('useGeoreference')}`
+          `; use georeference:               ${formatValue(
+            'useGeoreference',
+            false
+          )}`
         )
         lines.push(
           `; derive decl from date:          ${formatValue(
-            'deriveDeclFromDate'
+            'deriveDeclFromDate',
+            false
           )}`
         )
         lines.push(
-          `; UTM/GPT grid relative:          ${formatValue('utmGridRelative')}`
+          `; UTM/UPS grid relative:          ${formatValue(
+            'utmGridRelative',
+            false
+          )}`
         )
         lines.push(
           `; preserve vert shot orientation: ${formatValue(
-            'preserveVerticalShotOrientation'
+            'preserveVerticalShotOrientation',
+            false
           )}`
         )
         lines.push(
           `; preserve vert shot length:      ${formatValue(
-            'preserveVerticalShotLength'
+            'preserveVerticalShotLength',
+            false
           )}`
         )
         lines.push(
-          `; file is survey notes or other:  ${formatValue('typeIsOther')}`
+          `; file is survey notes or other:  ${formatValue(
+            'typeIsOther',
+            false
+          )}`
         )
         lines.push(
-          `; launch action:                  ${formatValue('launchAction')}`
+          `; launch action:                  ${formatValue(
+            'launchAction',
+            'properties'
+          )}`
         )
         lines.push(
           `; default view after compilation: ${formatValue(
-            'defaultViewAfterCompilation'
+            'defaultViewAfterCompilation',
+            'north or east'
           )}`
         )
         lines.push(
           `; process source svg if attached: ${formatValue(
-            'processSourceSvgIfAttached'
+            'processSourceSvgIfAttached',
+            false
           )}`
         )
         lines.push(match)
