@@ -84,7 +84,11 @@ module.exports = {
 }
 
 if (!isTest) {
-  module.exports.entry = ['@babel/polyfill', './src/index.tsx']
+  module.exports.entry = [
+    'core-js/stable',
+    'regenerator-runtime/runtime',
+    './src/index.tsx',
+  ]
   module.exports.devServer = {
     port: 3000,
     contentBase: __dirname,

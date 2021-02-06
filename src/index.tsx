@@ -13,8 +13,8 @@ function mount(Root: React.ComponentType<any>): void {
 }
 
 if ((module as any).hot instanceof Object) {
-  ;(module as any).hot.accept('./Root', () => {
-    mount(require('./Root').default)
+  ;(module as any).hot.accept('./Root', async () => {
+    mount((await import('./Root')).default)
   })
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useLocation, useHistory } from 'react-router-dom'
 
-export default function useQueryParams<P extends {}>(): [
+export default function useQueryParams<P extends Record<string, any>>(): [
   P,
   (newParams: Partial<P>) => void
 ] {
@@ -18,5 +18,8 @@ export default function useQueryParams<P extends {}>(): [
     },
     [queryParams]
   )
-  return [Object.fromEntries(queryParams.entries()) as any, setQueryParams]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const result: any = {}
+  queryParams.forEach((value: string, key: string) => (result[key] = value))
+  return [result, setQueryParams]
 }

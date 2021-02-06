@@ -2,13 +2,15 @@
   "extends": [
     "@jedwards1211/eslint-config-typescript",
     "@jedwards1211/eslint-config-react",
-    "eslint-config-prettier"
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
   ],
   "env": {
     "browser": true
   },
   "rules": {
     "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/ban-ts-ignore": 0
+    "@typescript-eslint/ban-ts-comment": 0
   }
 }
